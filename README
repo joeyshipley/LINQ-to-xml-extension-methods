@@ -1,0 +1,20 @@
+*SUMMARY*
+These helper methods will probably have little use to most of the world, however I'm finding myself writing alot of LINQ to XHTML (XML of valid XHTML), so they serve me well.
+
+Example use:
+(xdoc is the representation of my XDocument containing the XHTML.)
+
+var htmlElement = xdoc.Descendants()
+	.FirstOrDefault(d => d.Attribute("class") != null && d.Attribute("class").Value.ToLower().Contains(searchingForClassNameVariable.ToLower()));
+var htmlElementValue = htmlElement != null
+	? htmlElement.Value.Trim()
+	: string.Empty;
+
+With the extension methods, I'm now writting the above code as:
+
+var htmlElementValue = xdoc.Descendants()
+	.FirstOrDefaultByAttribute("class", searchingForClassNameVariable)
+	.ElementValue();
+
+*NOTE*
+The ByAttribute extension methods are currently poorly named. I'm fighting with getting the naming better/shorter without loosing meaning, however they don't currently 'accurately' reflect that the logic inside is using a 'Contains()' instead of an '=='. Because I'm selecting based on html class names in many cases, the Equals isn't going to work. Sometimes I need to select an element that has multiple classes assigned and I only want to use the selector classes not the design classes. Once I have a better naming convention for these that isn't massively long I'll refactor them.
